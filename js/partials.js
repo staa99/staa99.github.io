@@ -3,7 +3,7 @@
     function detectPartials()
     {
         // use a partial tag
-        var partials = document.getElementsByTagName("partial");
+        var partials = document.querySelectorAll("div[data-partial]");
 
         // process the partials
         for (var i in partials)
@@ -19,7 +19,7 @@
     function processPartial(partial)
     {
         // get the links
-        var link = partial.getAttribute("href");
+        var link = partial.getAttribute("data-partial");
         if (link === null)
         {
             console.log("Skipping this partial because there's no link: " + partial);
@@ -47,29 +47,46 @@
             }
         }
 
-        // then add the scripts
-        var scripts = response.head.children;
+        // then add the scripts/links
+        var headChildren = response.head.children;
+
+        function moveToNextOrStop(pos) {
+            if (++pos < headChildren.length) {
+                loadScripts(pos);
+                return pos;
+            }
+            else {
+                partial.parentNode.removeChild(partial);
+                return headChildren.length;
+            }
+        }
 
         function loadScripts(pos)
         {
-            if (scripts.hasOwnProperty(pos))
+            if (headChildren.hasOwnProperty(pos))
             {
-                var el = scripts[pos];
-                var script = document.createElement("script");
-                script.setAttribute("type", "text/javascript");
-                script.setAttribute("src", el.getAttribute("src"));
-                script.onload = function()
+                var child = headChildren[pos];
+                var type = child.tagName;
+                if (type.toLowerCase() !== "script" && type.toLowerCase() !== "link")
                 {
-                    if (++pos < scripts.length)
+                    if (moveToNextOrStop(pos) === headChildren.length)
                     {
-                        loadScripts(pos);
+                        return;
                     }
-                    else
-                    {
-                        partial.parentNode.removeChild(partial);
-                    }
+                }
+
+                var headElement = document.createElement(type);
+                for (var attr, i = 0, attrs = child.attributes, n = attrs.length; i < n; i++) {
+                    attr = attrs[i];
+                    headElement.setAttribute(attr.nodeName, attr.nodeValue);
+                }
+
+                headElement.onload = function()
+                {
+                    pos = moveToNextOrStop(pos);
                 };
-                partial.parentNode.insertBefore(script, partial);
+
+                partial.parentNode.insertBefore(headElement, partial);
             }
         }
 
