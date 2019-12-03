@@ -1,6 +1,6 @@
 (function()
 {
-    function detectPartials()
+    function detectPartials(document)
     {
         // use a partial tag
         var partials = document.querySelectorAll("div[data-partial]");
@@ -43,12 +43,24 @@
             if (children.hasOwnProperty(i))
             {
                 var child = children[i];
+
+                // detect partials in the child
+                detectPartials(child);
                 partial.parentNode.insertBefore(child, partial);
             }
         }
 
         // then add the scripts/links
         var headChildren = response.head.children;
+
+        // if there are no headChildren,
+        // remove the partial here
+        if (headChildren.length === 0)
+        {
+            partial.parentNode.removeChild(partial);
+        }
+
+        loadScripts(0);
 
         function moveToNextOrStop(pos)
         {
@@ -60,7 +72,6 @@
             else
             {
                 partial.parentNode.removeChild(partial);
-                detectPartials();
                 return headChildren.length;
             }
         }
@@ -94,8 +105,6 @@
                 partial.parentNode.insertBefore(headElement, partial);
             }
         }
-
-        loadScripts(0);
     }
 
     function loadUrl(url, callback)
@@ -107,5 +116,5 @@
         request.send();
     }
 
-    detectPartials();
+    detectPartials(document);
 })();
