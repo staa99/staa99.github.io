@@ -50,13 +50,17 @@
         // then add the scripts/links
         var headChildren = response.head.children;
 
-        function moveToNextOrStop(pos) {
-            if (++pos < headChildren.length) {
+        function moveToNextOrStop(pos)
+        {
+            if (++pos < headChildren.length)
+            {
                 loadScripts(pos);
                 return pos;
             }
-            else {
+            else
+            {
                 partial.parentNode.removeChild(partial);
+                detectPartials();
                 return headChildren.length;
             }
         }
@@ -76,7 +80,8 @@
                 }
 
                 var headElement = document.createElement(type);
-                for (var attr, i = 0, attrs = child.attributes, n = attrs.length; i < n; i++) {
+                for (var attr, i = 0, attrs = child.attributes, n = attrs.length; i < n; i++)
+                {
                     attr = attrs[i];
                     headElement.setAttribute(attr.nodeName, attr.nodeValue);
                 }
