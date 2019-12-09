@@ -143,7 +143,13 @@
                     pos = moveToNextOrStop(pos);
                 };
 
-                partial.parentNode.insertBefore(headElement, partial);
+                // if type is link, append to head instead
+                if (type === "link") {
+                    document.head.append(headElement);
+                }
+                else {
+                    partial.parentNode.insertBefore(headElement, partial);
+                }
             }
         }
     }
