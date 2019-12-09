@@ -1,47 +1,98 @@
-(function()
-{
-    function detectPartials(document)
-    {
+(function () {
+    function detectPartials(document) {
         // use a partial tag
-        var partials = document.querySelectorAll("div[data-partial]");
+        var divPartials = document.querySelectorAll("div[data-partial]");
+        var tagPartials = document.getElementsByTagName("partial");
+
+        var partials = [];
+        var i;
+        for (i in divPartials) {
+            if (divPartials.hasOwnProperty(i)) {
+                partials.push(divPartials[i]);
+            }
+        }
+
+        for (i in tagPartials) {
+            if (tagPartials.hasOwnProperty(i)) {
+                partials.push(tagPartials[i]);
+            }
+        }
 
         // process the partials
-        for (var i in partials)
-        {
-            if (partials.hasOwnProperty(i))
-            {
+        for (i in partials) {
+            if (partials.hasOwnProperty(i)) {
                 var partial = partials[i];
                 processPartial(partial);
             }
         }
     }
 
-    function processPartial(partial)
-    {
-        // get the links
-        var link = partial.getAttribute("data-partial");
-        if (link === null)
-        {
+    function processPartial(partial) {
+        var link = getLink(partial);
+
+        if (link === null) {
             console.log("Skipping this partial because there's no link: " + partial);
             return;
         }
 
         loadUrl(link,
-            function()
-            {
-                loadUrlCallback(partial, this.response);
+            function () {
+                if (this.status >= 200 && this.status < 300) {
+                    loadUrlCallback(partial, this.response);
+                }
+                else {
+                    partial.parentNode.removeChild(partial);
+                }
             });
     }
 
-    function loadUrlCallback(partial, response)
-    {
+    function getLink(partial) {
+        // get the links
+        var tagName = partial.tagName.toLowerCase();
+        var link = tagName === "partial"
+            ? partial.getAttribute("href")
+            : tagName === "div"
+                ? partial.getAttribute("data-partial")
+                : null;
+
+        return resolveLink(partial, link);
+    }
+
+    function resolveLink(partial, link) {
+        // exclude empty links
+        if (link === null || link === "" || link === undefined) {
+            return null;
+        }
+
+        if (link[0] === "/" || link.match(/^\w+:\/\/.+/)) {
+            return link;
+        }
+
+        var path = partial.baseURI;
+        var start = path.indexOf("?");
+        if (start !== -1) {
+            path = path.substr(0, start);
+        }
+
+        start = path.indexOf("#");
+        if (start !== -1) {
+            path = path.substr(0, start);
+        }
+
+        if (path[path.length - 1] !== "/") {
+            var schemeEnd = path.indexOf("://") + 3;
+            path = path.substring(0, path.substring(schemeEnd).lastIndexOf("/") + schemeEnd) + "/";
+        }
+
+        return path + link;
+    }
+
+    function loadUrlCallback(partial, response) {
         var children = response.body.children;
         // first add the children
         var i;
-        for (i in children)
-        {
-            if (children.hasOwnProperty(i))
-            {
+        for (i in children) {
+            if (children.hasOwnProperty(i)) {
                 var child = children[i];
 
                 // detect partials in the child
@@ -55,50 +106,40 @@
 
         // if there are no headChildren,
         // remove the partial here
-        if (headChildren.length === 0)
-        {
+        if (headChildren.length === 0) {
             partial.parentNode.removeChild(partial);
         }
 
         loadScripts(0);
 
-        function moveToNextOrStop(pos)
-        {
-            if (++pos < headChildren.length)
-            {
+        function moveToNextOrStop(pos) {
+            if (++pos < headChildren.length) {
                 loadScripts(pos);
                 return pos;
             }
-            else
-            {
+            else {
                 partial.parentNode.removeChild(partial);
                 return headChildren.length;
             }
         }
 
-        function loadScripts(pos)
-        {
-            if (headChildren.hasOwnProperty(pos))
-            {
+        function loadScripts(pos) {
+            if (headChildren.hasOwnProperty(pos)) {
                 var child = headChildren[pos];
-                var type = child.tagName;
-                if (type.toLowerCase() !== "script" && type.toLowerCase() !== "link")
-                {
-                    if (moveToNextOrStop(pos) === headChildren.length)
-                    {
+                var type = child.tagName.toLowerCase();
+                if (type !== "script" && type !== "link") {
+                    if (moveToNextOrStop(pos) === headChildren.length) {
                         return;
                     }
                 }
 
                 var headElement = document.createElement(type);
-                for (var attr, i = 0, attrs = child.attributes, n = attrs.length; i < n; i++)
-                {
+                for (var attr, i = 0, attrs = child.attributes, n = attrs.length; i < n; i++) {
                     attr = attrs[i];
                     headElement.setAttribute(attr.nodeName, attr.nodeValue);
                 }
 
-                headElement.onload = function()
-                {
+                headElement.onload = function () {
                     pos = moveToNextOrStop(pos);
                 };
 
@@ -107,8 +148,7 @@
         }
     }
 
-    function loadUrl(url, callback)
-    {
+    function loadUrl(url, callback) {
         var request = new XMLHttpRequest();
         request.open("GET", url, true);
         request.responseType = "document";
