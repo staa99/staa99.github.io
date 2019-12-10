@@ -1,4 +1,13 @@
 (function () {
+    var event = new Event("partials:loaded");
+
+    var count = 0;
+    function dispatchEvent() {
+        if (--count === 0) {
+            window.dispatchEvent(event);
+        }
+    }
+
     function detectPartials(document) {
         // use a partial tag
         var divPartials = document.querySelectorAll("div[data-partial]");
@@ -21,6 +30,7 @@
         // process the partials
         for (i in partials) {
             if (partials.hasOwnProperty(i)) {
+                count++;
                 var partial = partials[i];
                 processPartial(partial);
             }
@@ -42,6 +52,7 @@
                 }
                 else {
                     partial.parentNode.removeChild(partial);
+                    dispatchEvent();
                 }
             });
     }
@@ -108,6 +119,7 @@
         // remove the partial here
         if (headChildren.length === 0) {
             partial.parentNode.removeChild(partial);
+            dispatchEvent();
         }
 
         loadScripts(0);
@@ -119,6 +131,7 @@
             }
             else {
                 partial.parentNode.removeChild(partial);
+                dispatchEvent();
                 return headChildren.length;
             }
         }

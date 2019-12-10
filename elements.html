@@ -5,30 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+          content=".NET Software Developer with passion for development and innovation."/>
     <link rel="icon"
           href="img/favicon.png"
           type="image/png">
-    <title>Eventure Multi</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet"
-          href="css/bootstrap.css">
-    <link rel="stylesheet"
-          href="vendors/linericon/style.css">
-    <link rel="stylesheet"
-          href="css/font-awesome.min.css">
-    <link rel="stylesheet"
-          href="vendors/owl-carousel/owl.carousel.min.css">
-    <link rel="stylesheet"
-          href="vendors/lightbox/simpleLightbox.css">
-    <link rel="stylesheet"
-          href="vendors/nice-select/css/nice-select.css">
-    <link rel="stylesheet"
-          href="vendors/animate-css/animate.css">
-    <!-- main css -->
-    <link rel="stylesheet"
-          href="css/style.css">
-    <link rel="stylesheet"
-          href="css/responsive.css">
+          href="css/pageloader.css"
+          type="text/css"/>
+    <title>Ronin Elements - staa99 - Timehin Ahmad Alfawwaz</title>
+    <partial href="partials/head-links.html"></partial>
 </head>
 <body>
 
@@ -1117,64 +1103,30 @@
     </div>
 </div>
 <!-- End Align Area -->
-<!--================Footer Area =================-->
-<footer class="footer_area p_120">
-    <div class="container">
-        <div class="row footer_inner">
-            <div class="col-lg-5 col-sm-6">
-                <aside class="f_widget ab_widget">
-                    <div class="f_title">
-                        <h3>About Me</h3>
-                    </div>
-                    <p>
-                        I am a passionate .NET backend software developer. I have basic knowledge of HTML and other frontend tech, enough to allow me to use templates or integrate the work of frontend devs.
-                    </p>
-                    <p>
-                        I have 4+ years of experience developing and maintaining web and mobile apps and working on projects of various sizes.
-                    </p>
-                </aside>
-            </div>
-            <div class="col-lg-5 col-sm-6">
-                <h3 class="text-center col-sm-12">I am staa99.</h3>
-            </div>
-            <div class="col-lg-2">
-                <aside class="f_widget social_widget">
-                    <div class="f_title">
-                        <h3>Follow Me</h3>
-                    </div>
-                    <p>Let us be social</p>
-                    <ul class="list">
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-facebook"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-twitter"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-dribbble"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fa fa-behance"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </aside>
-            </div>
-        </div>
+
+<!--================ Begin Page loader Area =================-->
+<div class="page-loader">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
     </div>
-</footer>
-<!--================End Footer Area =================-->
+</div>
+<!--================ End Page loader Area =================-->
+
 <partial href="partials/footer.html"></partial>
 <partial href="partials/scripts.html"></partial>
-<script src="https://cdn.jsdelivr.net/gh/staa99/partials.js@2.0.1/partials.min.js"
-        integrity="sha512-S559UnGWXtYy3v7HuMtTfBnk79q3qg+4OQ7403IPYOfjfhorLh6P4Oi7k1+uPwnZ6H8t8y9gY6Lcfv4CNUnDCg=="
+<script src="https://cdn.jsdelivr.net/gh/staa99/partials.js@3.0.0/partials.min.js"
+        integrity="sha512-LaOeBdWQUe/9ZjUDbuwXqx34mvjpkO+z7XnHMzVVnd88vhPXZWM8zsp5tVaGPxBVBHVa1do2BahVa7IBippvow=="
         crossorigin="anonymous"></script>
+<script>
+    // remove page loader on load complete
+    window.addEventListener("partials:loaded", function () {
+        var loader = document.querySelector(".page-loader");
+        loader.parentNode.removeChild(loader);
+    });
+</script>
 </body>
 </html>
