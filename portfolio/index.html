@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+          content="staa99 has worked on a number of projects as a member of teams of various sizes. He's a .NET Software Developer with passion for innovation." />
+    <link rel="icon"
+          href="img/favicon.png"
+          type="image/png">
+    <link rel="stylesheet"
+          href="css/pageloader.css"
+          type="text/css" />
+    <title>My Portfolio - staa99 - Timehin Ahmad Alfawwaz</title>
+    <partial href="partials/head-links.html"></partial>
+</head>
+    <body>
+        <!--================Header Menu Area =================-->
+        <partial href="partials/header-menu.html"></partial>
+        <!--================Header Menu Area =================-->
+        <!--================Home Banner Area =================-->
+        <section class="banner_area">
+            <div class="banner_inner d-flex align-items-center">
+                <div class="overlay bg-parallax"
+                     data-stellar-ratio="0.9"
+                     data-stellar-vertical-offset="0"
+                     data-background="">
+                </div>
+                <div class="container">
+                    <div class="banner_content text-center">
+                        <h2>Portfolio</h2>
+                        <div class="page_link">
+                            <a href="index.html">Home</a>
+                            <a href="portfolio.html">Portfolio</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--================End Home Banner Area =================-->
+        <!--================Projects Area =================-->
+        <partial href="partials/portfolio.html"></partial>
+        <!--================End Projects Area =================-->
+        <!--================Testimonials Area =================-->
+        <partial href="partials/testimonials.html"></partial>
+        <!--================End Testimonials Area =================-->
+        <!--================ Begin Page loader Area =================-->
+        <div class="page-loader">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+        <!--================ End Page loader Area =================-->
+
+        <partial href="partials/footer.html"></partial>
+        <partial href="partials/scripts.html"></partial>
+        <script src="https://cdn.jsdelivr.net/gh/staa99/partials.js@3.0.0/partials.min.js"
+                integrity="sha512-LaOeBdWQUe/9ZjUDbuwXqx34mvjpkO+z7XnHMzVVnd88vhPXZWM8zsp5tVaGPxBVBHVa1do2BahVa7IBippvow=="
+                crossorigin="anonymous"></script>
+        <script>
+            // remove page loader on load complete
+            window.addEventListener("partials:loaded", function () {
+                var loader = document.querySelector(".page-loader");
+                loader.parentNode.removeChild(loader);
+            });
+        </script>
+    </body>
+</html>
